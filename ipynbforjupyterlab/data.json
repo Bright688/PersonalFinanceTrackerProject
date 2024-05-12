@@ -1,0 +1,23 @@
+{
+    "bright68": {
+        "password": "chi",
+        "Allincomes": {
+            "1": {
+                "date": "2024-05-12",
+                "income": 70000
+            }
+        },
+        "Allexpenses": {
+            "1": {
+                "date": "2024-05-12",
+                "expenses": 30000
+            }
+        },
+        "Allsavings": {
+            "1": {
+                "date": "2024-05-12",
+                "savings": 40000
+            }
+        }
+    }
+}
