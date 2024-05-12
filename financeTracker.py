@@ -228,6 +228,7 @@ def addExpenses(username):
             # Save to data.json file
             save_data(data)
             print("Expenses added successfully")
+            CalculateSavings(username, expensesAmount, expensesDate, expensesID)
     
     
         elif len(data[username]['Allexpenses']) > 0:
@@ -297,43 +298,54 @@ def CalculateSavings(username, expenses, expensesDate, expensesID):
 
 
 def generateReport(username):
-  income_dates = []
-  incomes = []
-  expenses_dates = []
-  expenses = []
-  saving_dates = []
-  savings = []
-  #extract the dates, incomes, expenses, and savings from the dictionary to visualize the data
-  #extract the incomes and their dates from the dictionary
-  for key, value in data[username]['Allincomes'].items():
-     income_dates.append(value['date'])
-     incomes.append(value['income'])
+    income_dates = []
+    incomes = []
+    expenses_dates = []
+    expenses = []
+    saving_dates = []
+    savings = []
 
-   #extract the expenses and their dates from the dictionary
-  for key, value in data[username]['Allexpenses'].items():
-     expenses_dates.append(value['date'])  
-     expenses.append(value['expenses'])
+    total_income = 0
+    total_expenses = 0
+    total_savings = 0
 
-  #extract the savings and their dates from the dictionary
-  for key, value in data[username]['Allsavings'].items():
-     saving_dates.append(value['date'])
-     savings.append(value['savings'])
-  
-  # Plotting the data
-  plt.figure(figsize=(10, 6))
-  plt.plot(income_dates, incomes, label='Income', marker='o')
-  plt.plot(expenses_dates, expenses, label='Expenses', marker='o')
-  plt.plot(saving_dates, savings, label='Savings', marker='o')
+    # Extract the dates, incomes, expenses, and savings from the dictionary to visualize the data
+    # Extract the incomes and their dates from the dictionary
+    for key, value in data[username]['Allincomes'].items():
+        income_dates.append(value['date'])
+        incomes.append(value['income'])
+        total_income += value['income']
 
-  plt.title('Personal Finance Report')
-  plt.xlabel('Date')
-  plt.ylabel('Amount')
-  plt.legend()
-  plt.grid(True)
-  plt.xticks(rotation=45)
-  plt.tight_layout()
+    # Extract the expenses and their dates from the dictionary
+    for key, value in data[username]['Allexpenses'].items():
+        expenses_dates.append(value['date'])
+        expenses.append(value['expenses'])
+        total_expenses += value['expenses']
 
-  plt.show()
+    # Extract the savings and their dates from the dictionary
+    for key, value in data[username]['Allsavings'].items():
+        saving_dates.append(value['date'])
+        savings.append(value['savings'])
+        total_savings += value['savings']
+
+    # Plotting the data
+    plt.figure(figsize=(10, 6))
+    plt.plot(income_dates, incomes, label='Income', marker='o')
+    plt.plot(expenses_dates, expenses, label='Expenses', marker='o')
+    plt.plot(saving_dates, savings, label='Savings', marker='o')
+
+    plt.title('Personal Finance Report')
+    plt.xlabel('Date')
+    plt.ylabel('Amount')
+    plt.legend()
+    plt.grid(True)
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+
+    # Display total income, total expenses, and total savings
+    plt.text(0.5, 0.5, f'Total Income: ${total_income}\nTotal Expenses: ${total_expenses}\nTotal Savings: ${total_savings}', horizontalalignment='center', verticalalignment='center', transform=plt.gca().transAxes)
+
+    plt.show()
 
 def logout():
   print("Log out successfully")
