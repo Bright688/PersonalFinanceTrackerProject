@@ -50,5 +50,5 @@ To use the Personal Finance Tracker, follow these steps:
 - `Jupyter Notebook`: Required for running the interactive notebooks.
 
 ## Contributors
-- [Your Name]
-- [Your Email]
+- [Bright Akaraiwe]
+- [akaraiwebright@gmail.com]
