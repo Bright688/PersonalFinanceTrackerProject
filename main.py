@@ -8,19 +8,23 @@ print("Personal Finance Tracker")
 income = []
 expenses = []
 savings = []
+
+
 # Function to load initial data from JSON file
 def load_initial_data():
-    with open('data.json', 'r') as data_file:
-        return json.load(data_file)
+  with open('data.json', 'r') as data_file:
+    return json.load(data_file)
+
 
 data = load_initial_data()
 
 
 # Function to save data to JSON file
 def save_data(data):
-    with open('data.json', 'w') as data_file:
-        json.dump(data, data_file, indent=4)
-      
+  with open('data.json', 'w') as data_file:
+    json.dump(data, data_file, indent=4)
+
+
 #The data dictionary will store the income, expenses, and savings data for each month.
 #The dictionary will be updated with the new income data and expenses daily, weekly, or monthly. However a date will be be stored to track when a new income or expenses was added.
 #The new income added will be added to a list and the new expenses added to a list and stored withs current date to easily track when the income and expenses was added.
@@ -60,7 +64,7 @@ def login():
     try:
       username = input("Enter your username: ")
       password = input("Enter your password: ")
-       #check if username is in the data dictionary
+      #check if username is in the data dictionary
       if username not in data:
         #if username not found raise value error
         raise ValueError("Incorrect username or password")
@@ -80,37 +84,38 @@ def login():
 def register():
   print("Welcome to the Registration system")
   print("Fill the registration form")
-  
+
   while True:
     try:
-        username = input("Enter username: ")
-        # Check if the username already exists in the data dictionary
-        if username in data:
-            raise ValueError("Username already exists. Please select another one.")
-          #get user input for password
-        password = input("Enter password: ")
+      username = input("Enter username: ")
+      # Check if the username already exists in the data dictionary
+      if username in data:
+        raise ValueError("Username already exists. Please select another one.")
+      #get user input for password
+      password = input("Enter password: ")
       #get user input to confirm password
-        confirmPassword = input("Confirm password: ")
-        #check password is the same as confirm password
-        if password != confirmPassword:
-           #raise value error if password is not in dictionary
-            raise ValueError("Passwords do not match. Please try again.")
-        # If everything is fine, add the new user to the data dictionary
-        data[username] = {
-            'password': password,
-            'Allincomes': {},
-            'Allexpenses': {},
-            'Allsavings': {}
-        }
-        save_data(data)
-        print("Registration successful.")
-       #create a new instance of the user interface class
-        user_interface = User_Interface(username)
-        user_interface.call_user_interface()
-        break  # Break out of the loop after successful 
-       
+      confirmPassword = input("Confirm password: ")
+      #check password is the same as confirm password
+      if password != confirmPassword:
+        #raise value error if password is not in dictionary
+        raise ValueError("Passwords do not match. Please try again.")
+      # If everything is fine, add the new user to the data dictionary
+      data[username] = {
+          'password': password,
+          'Allincomes': {},
+          'Allexpenses': {},
+          'Allsavings': {}
+      }
+      save_data(data)
+      print("Registration successful.")
+      #create a new instance of the user interface class
+      user_interface = User_Interface(username)
+      user_interface.call_user_interface()
+      break  # Break out of the loop after successful
+
     except ValueError as e:
-        print(e)
+      print(e)
+
 
 class User_Interface:
 
@@ -150,7 +155,7 @@ class User_Interface:
         print(e)
 
 
-#Function to add income 
+#Function to add income
 def addIncome(username):
   # Get the income amount from the user
   incomeAmount = input("Enter income amount: ")
@@ -158,199 +163,240 @@ def addIncome(username):
   # Get the income date automatically from the system
   incomeDate = datetime.now().strftime('%Y-%m-%d')
   #store the income added to the array
- #check if the AllIncome is not empty 
+  #check if the AllIncome is not empty
   if len(data[username]['Allincomes']) == 0:
-      incomeID = len(data[username]['Allincomes']) + 1
-      incomeID = str(incomeID)
-      #add the new income to the dictionary and store the             incomeID incomeDate, and incomeAmount
-      data[username]['Allincomes'][incomeID] = {'date': incomeDate, 'income': incomeAmount}
-      # Save to data.json file
-      save_data(data)
-      print("Income added successfully")
-
+    incomeID = len(data[username]['Allincomes']) + 1
+    incomeID = str(incomeID)
+    #add the new income to the dictionary and store the             incomeID incomeDate, and incomeAmount
+    data[username]['Allincomes'][incomeID] = {
+        'date': incomeDate,
+        'income': incomeAmount
+    }
+    # Save to data.json file
+    save_data(data)
+    print("Income added successfully")
   #if the Allincomes is not empty
   elif len(data[username]['Allincomes']) > 0:
-      
-      #if the Allincome is not empty and has a key and value loop through the items in the Allincome
-      for incomeKey, incomeValue in data[username]['Allincomes'].items():
-        #check if the income date is already added to the Allincome and date generated is the same, which means the user has already added an income for the same date
-          if incomeValue['date'] == incomeDate:
-            
-              print("Income already added for today")
-              print("Do you want to add to the income\n Enter option y or n")
-             #if the income date is already added to the Allincome ask the user if they want to add to the income
-              confirm = input("Enter y or n: ") 
-            #if the user input is y add the income to the all income
-              if confirm == 'y':
-                #use the income key to get the particular one with same date and get the income value
-                income = data[username]['Allincomes'][incomeKey]['income']
-                #convert the income value to integer to be able to add
-                income = int(income)
-                #add the income amount to the income value
-                income +=int(incomeAmount)
-                
-                data[username]['Allincomes'][incomeKey] = {'date': incomeDate, 'income': income}
-                save_data(data)
-                print("Income updated successfully")
-                break
-              elif confirm == 'n':
-                break
 
-          elif str(incomeValue) != str(incomeDate):
-            #get the length of the income added and add 1 to get the next id
-            incomeID = len(data[username]['Allincomes']) + 1
-            #convert the incomeID to a string
-            incomeID = str(incomeID)
-            #add the new income to the dictionary and store the             incomeID incomeDate, and incomeAmount
-            data[username]['Allincomes'][incomeID] = {'date': incomeDate, 'income': incomeAmount}
-  # Save to data.json file
-            save_data(data)
-            print("Income added successfully")
+    #if the Allincome is not empty and has a key and value loop through the items in the Allincome
 
+    for incomeKey, incomeValue in list(data[username]['Allincomes'].items()):
+      #check if the income date is already added to the Allincome and date generated is the same, which means the user has already added an income for the same date
+      if incomeValue['date'] == incomeDate:
+         
+        print("Income already added for today")
+        print("Do you want to add to the income\n Enter option y or n")
+        #if the income date is already added to the Allincome ask the user if they want to add to the income
+        confirm = input("Enter y or n: ")
+        #if the user input is y add the income to the all income
+        if confirm == 'y':
+          #use the income key to get the particular one with same date and get the income value
+          income = data[username]['Allincomes'][incomeKey]['income']
+          #convert the income value to integer to be able to add
+          income = int(income)
+          #add the income amount to the income value
+          income += int(incomeAmount)
+
+          data[username]['Allincomes'][incomeKey] = {
+              'date': incomeDate,
+              'income': income
+          }
+          
+          save_data(data)
+          print("Income updated successfully")
+          break
+        elif confirm == 'n':
+          break
+
+      elif incomeDate != data[username]['Allincomes'][str(len(data[username]['Allincomes']))]['date']:
+       
+        #get the length of the income added and add 1 to get the next id    
+        incomeID = len(data[username]['Allincomes']) + 1
+        #convert the incomeID to a string
+        incomeID = str(incomeID)
+        #add the new income to the dictionary and store the             incomeID incomeDate, and incomeAmount
+        data[username]['Allincomes'][incomeID] = {
+            'date': incomeDate,
+             'income': incomeAmount
+        }
+        
+        # Save to data.json file
+        save_data(data)
+        print("Income added successfully")
+        
 
 #function to add expenses
 def addExpenses(username):
-  if len(data[username]['Allincomes'])==0:
+  if len(data[username]['Allincomes']) == 0:
     print("No Income added yet. Please add income first")
-    
+
   else:
-      # Get the expense amount from the user
-        expensesAmount = input("Enter Expenses amount: ")
+    # Get the expense amount from the user
+    expensesAmount = input("Enter Expenses amount: ")
+
+    # Get the expenses date automatically from the system
+    expensesDate = datetime.now().strftime('%Y-%m-%d')
+    #store the expenses added to the array
+    #check if the Allexpenses is not empty
+    if len(data[username]['Allexpenses']) == 0:
+      expensesID = len(data[username]['Allexpenses']) + 1
+      #add the new expenses to the dictionary and store the             expensesID expensesDate, and expensesAmount
+      data[username]['Allexpenses'][expensesID] = {
+          'date': expensesDate,
+          'expenses': expensesAmount
+      }
+      # Save to data.json file
+      save_data(data)
+      print("Expenses added successfully")
+      CalculateSavings(username, expensesDate, expensesID)
       
-      # Get the expenses date automatically from the system
-        expensesDate = datetime.now().strftime('%Y-%m-%d')
-       #store the expenses added to the array
-       #check if the Allexpenses is not empty 
-        if len(data[username]['Allexpenses']) == 0:
-            expensesID = len(data[username]['Allexpenses']) + 1
-            #add the new expenses to the dictionary and store the             expensesID expensesDate, and expensesAmount
-            data[username]['Allexpenses'][expensesID] = {'date': expensesDate, 'expenses': expensesAmount}
-            # Save to data.json file
+
+    elif len(data[username]['Allexpenses']) > 0:
+
+      #if the Allexpenses is not empty and has a key and value in loop through the items in the Allexpenses
+      for expensesKey, expensesValue in list(data[username]['Allexpenses'].items()):
+        #check if the expenses date is already added to the Allexpenses
+        if expensesValue['date'] == expensesDate:
+
+          print("Expenses already added for today")
+          print("Do you want to add to the expenses\n Enter option y or n")
+          #if the expenses date is already added to the Allexpenses ask the user if they want to add to the expenses
+          confirm = input("Enter y or n: ")
+          #if the user input is y add the expenses to the all expenses
+          if confirm == 'y':
+            #use the expenses key to get the particular one with same date and get the expenses value
+            expenses = data[username]['Allexpenses'][expensesKey]['expenses']
+            #convert the expense value to integer to be able to add
+            expenses = int(expenses)
+            #add the expenses amount to the expenses value
+            expenses += int(expensesAmount)
+            #update the expenses value in the dictionary
+            data[username]['Allexpenses'][expensesKey] = {
+                'date': expensesDate,
+                'expenses': int(expenses)
+            }
             save_data(data)
-            print("Expenses added successfully")
-            CalculateSavings(username, expensesAmount, expensesDate, expensesID)
-    
-    
-        elif len(data[username]['Allexpenses']) > 0:
-    
-            #if the Allexpenses is not empty and has a key and value in loop through the items in the Allexpenses
-            for expensesKey, expensesValue in data[username]['Allexpenses'].items():
-              #check if the expenses date is already added to the Allexpenses 
-                if expensesValue['date'] == expensesDate:
-    
-                    print("Expenses already added for today")
-                    print("Do you want to add to the expenses\n Enter option y or n")
-                   #if the expenses date is already added to the Allexpenses ask the user if they want to add to the expenses
-                    confirm = input("Enter y or n: ") 
-                  #if the user input is y add the expenses to the all expenses
-                    if confirm == 'y':
-                      #use the expenses key to get the particular one with same date and get the expenses value
-                      expenses = data[username]['Allexpenses'][expensesKey]['expenses']
-                      #convert the expense value to integer to be able to add
-                      expenses = int(expenses)
-                      #add the expenses amount to the expenses value
-                      expenses +=int(expensesAmount)
-                      #update the expenses value in the dictionary
-                      data[username]['Allexpenses'][expensesKey] = {'date': expensesDate, 'expenses': expenses}
-                      save_data(data)
-                      print("Expenses updated successfully")
-                      #call the Calculatesavings function and pass the username, expenses, expensesDate, and expensesKey as parameter
-                      #this function is called here to update the savings if the expenses is updated
-                      CalculateSavings(username, expenses, expensesDate, expensesKey)
-                      break
-                    elif confirm == 'n':
-                      break
-    
-                elif str(expensesValue) != str(expensesDate):
-                  #get the length of the expenses added and add 1 to get the next id
-                  expensesID = len(data[username]['Allexpenses']) + 1
-                  #convert the expensesID to a string
-                  expensesID = str(expensesID)
-                  #add the new expenses to the dictionary and store the             expensesID expensesDate, and expensesAmount
-                  data[username]['Allexpenses'][expensesID] = {'date': expensesDate, 'expenses': expensesAmount}
-        # Save to data.json file
-                  save_data(data)
-                  print("Expenses added successfully")
-                  #cal the function Calculatesavings function and pass the username, expenses, expensesDate, expensesKey as parameter
-                  CalculateSavings(username, expensesAmount, expensesDate, expensesID)
-
-                  #call Calculatesavings function to to calculate the savings
+            print("Expenses updated successfully")
             
-        
+            #call the Calculatesavings function and pass the username, expenses, expensesDate, and expensesKey as parameter
+            #this function is called here to update the savings if the expenses is updated
+            CalculateSavings(username, expensesDate, expensesKey)
+            break
+          elif confirm == 'n':
+            break
 
-def CalculateSavings(username, expenses, expensesDate, expensesID):
+        elif expensesDate != data[username]['Allexpenses'][str(len(data[username]['Allexpenses']))]['date']:
+          #get the length of the expenses added and add 1 to get the next id
+          expensesID = len(data[username]['Allexpenses']) + 1
+          #convert the expensesID to a string
+          expensesID = str(expensesID)
+          #add the new expenses to the dictionary and store the             expensesID expensesDate, and expensesAmount
+          data[username]['Allexpenses'][expensesID] = {
+              'date': expensesDate,
+              'expenses': int(expensesAmount)
+          }
+          # Save to data.json file
+          save_data(data)
+          print("check3")
+          print("Expenses added successfully")
+          #cal the function Calculatesavings function and pass the username, expenses, expensesDate, expensesKey as parameter
+          CalculateSavings(username, expensesDate, expensesID)
+
+          #call Calculatesavings function to to calculate the savings
+
+
+def CalculateSavings(username, expensesDate, expensesID):
   #assign incomeTotal as 0
-   incomeTotal = 0
+  incomeTotal = 0
+  expensesTotal =0 
   #loop therough all income to get the income values
-   for incomeKey, incomeValue in data[username]['Allincomes'].items():
-     #get the income value
-     income = incomeValue['income']
-     #convert income value to integer
-     income = int(income)
-     #add the income value to the incomeTotal
-     incomeTotal +=income
-     #caculate to the income and expenses to get the savings
-   savings = incomeTotal - int(expenses)
-    #add the savings to the dictionary and store based on the expensesID
-   data[username]['Allsavings'][expensesID] = {'date': expensesDate, 'savings': savings}
+  for incomeKey, incomeValue in data[username]['Allincomes'].items():
+    #get the income value
+    income = incomeValue['income']
+    #convert income value to integer
+    income = int(income)
+    #add the income value to the incomeTotal
+    incomeTotal += income
+    #caculate to the income and expenses to get the savings
+  #loop therough all expense to get the expenses values
+  for expensesKey, expensesValue in data[username]['Allexpenses'].items():
+    #get the expenses value
+    expenses = expensesValue['expenses']
+    #convert expenses value to integer
+    expenses = int(expenses)
+    #add the expenses value to the incomeTotal
+    expensesTotal += expenses
+    #caculate to the income and expenses to get the savings
+  savings = incomeTotal - expensesTotal
+  #add the savings to the dictionary and store based on the expensesID
+  data[username]['Allsavings'][expensesID] = {
+      'date': expensesDate,
+      'savings': savings
+  }
   #save data to data.json file
-   save_data(data)
+  save_data(data)
 
 
 def generateReport(username):
-    income_dates = []
-    incomes = []
-    expenses_dates = []
-    expenses = []
-    saving_dates = []
-    savings = []
+  income_dates = []
+  incomes = []
+  expenses_dates = []
+  expenses = []
+  saving_dates = []
+  savings = []
 
-    total_income = 0
-    total_expenses = 0
-    total_savings = 0
+  total_income = 0
+  total_expenses = 0
+  total_savings = 0
 
-    # Extract the dates, incomes, expenses, and savings from the dictionary to visualize the data
-    # Extract the incomes and their dates from the dictionary
-    for key, value in data[username]['Allincomes'].items():
-        income_dates.append(value['date'])
-        incomes.append(value['income'])
-        total_income += value['income']
+  # Extract the dates, incomes, expenses, and savings from the dictionary to visualize the data
+  # Extract the incomes and their dates from the dictionary
+  for key, value in data[username]['Allincomes'].items():
+    income_dates.append(value['date'])
+    incomes.append(value['income'])
+    total_income += value['income']
 
-    # Extract the expenses and their dates from the dictionary
-    for key, value in data[username]['Allexpenses'].items():
-        expenses_dates.append(value['date'])
-        expenses.append(value['expenses'])
-        total_expenses += value['expenses']
+  # Extract the expenses and their dates from the dictionary
+  for key, value in data[username]['Allexpenses'].items():
+    expenses_dates.append(value['date'])
+    expenses.append(value['expenses'])
+    total_expenses += value['expenses']
 
-    # Extract the savings and their dates from the dictionary
-    for key, value in data[username]['Allsavings'].items():
-        saving_dates.append(value['date'])
-        savings.append(value['savings'])
-        total_savings += value['savings']
+  # Extract the savings and their dates from the dictionary
+  for key, value in data[username]['Allsavings'].items():
+    saving_dates.append(value['date'])
+    savings.append(value['savings'])
+    total_savings += value['savings']
 
-    # Plotting the data
-    plt.figure(figsize=(10, 6))
-    plt.plot(income_dates, incomes, label='Income', marker='o')
-    plt.plot(expenses_dates, expenses, label='Expenses', marker='o')
-    plt.plot(saving_dates, savings, label='Savings', marker='o')
+  # Plotting the data
+  plt.figure(figsize=(10, 6))
+  plt.plot(income_dates, incomes, label='Income', marker='o')
+  plt.plot(expenses_dates, expenses, label='Expenses', marker='o')
+  plt.plot(saving_dates, savings, label='Savings', marker='o')
 
-    plt.title('Personal Finance Report')
-    plt.xlabel('Date')
-    plt.ylabel('Amount')
-    plt.legend()
-    plt.grid(True)
-    plt.xticks(rotation=45)
-    plt.tight_layout()
+  plt.title('Personal Finance Report')
+  plt.xlabel('Date')
+  plt.ylabel('Amount')
+  plt.legend()
+  plt.grid(True)
+  plt.xticks(rotation=45)
+  plt.tight_layout()
 
-    # Display total income, total expenses, and total savings
-    plt.text(0.5, 0.5, f'Total Income: ${total_income}\nTotal Expenses: ${total_expenses}\nTotal Savings: ${total_savings}', horizontalalignment='center', verticalalignment='center', transform=plt.gca().transAxes)
+  # Display total income, total expenses, and total savings
+  plt.text(
+      0.5,
+      0.5,
+      f'Total Income: ${total_income}\nTotal Expenses: ${total_expenses}\nTotal Savings: ${total_savings}',
+      horizontalalignment='center',
+      verticalalignment='center',
+      transform=plt.gca().transAxes)
 
-    plt.show()
+  plt.show()
+
 
 def logout():
   print("Log out successfully")
   login()
-  
+
 
 HandleLoginsandRegistrationsInput()
-
