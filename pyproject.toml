@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "repl-nix-personalfinancetrackerproject"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+packages = [{include = "repl_nix_personalfinancetrackerproject"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+matplotlib = "^3.9.0"
+
+[tool.poetry.scripts]
+run = "python main.py"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
