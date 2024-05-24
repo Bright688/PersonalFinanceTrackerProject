@@ -13,7 +13,6 @@ To use the Personal Finance Tracker, follow these steps:
 ## Project Structure
 - `main.py`: Contains the main code for the Personal Finance Tracker.
 - `data.json`: JSON file to store user data such as income, expenses, and savings.
-- `ipynbforjupyter/`: Folder containing Jupyter Notebook files for interactive usage.
 - `README.md`: This file, providing information about the project.
 
 ## Functionality
@@ -47,7 +46,11 @@ To use the Personal Finance Tracker, follow these steps:
 
 ## Dependencies
 - `matplotlib`: Required for generating graphs in the financial report.
-- `Jupyter Notebook`: Required for running the interactive notebooks.
+- `JupyterLab` or JupyterLab: Required for running the interactive notebooks.
+- 
+## Jupyter Notebook
+-  To use jupyterLab create another folder named JupyterLab and duplicate the main.py and add to the folder and rename the extension to ipynb.
+-  Rename from main.py to main.ipynb and duplicate the data.json and place in the JupyterLab folder.
 
 ## Contributors
 - [Bright Akaraiwe]
